@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/PagerDuty/go-pagerduty"
@@ -92,12 +93,15 @@ func (m *MetricsCollectorResolvedIncidents) Collect(callback chan<- func()) {
 func (m *MetricsCollectorResolvedIncidents) collectIncidents(callback chan<- func()) {
 
 	listOpts := pagerduty.ListIncidentsOptions{}
-	listOpts.Limit = PagerdutyListLimit
 	listOpts.Statuses = []string{"resolved"}
 	listOpts.Offset = 0
 	listOpts.SortBy = "created_at:desc"
-	// listOpts.Until = now.Format(time.RFC3339)
-	// listOpts.Since = now.Add(-opts.ScrapeTime.Live).Format(time.RFC3339)
+
+	if int(opts.PagerDuty.Incident.Limit) < PagerdutyListLimit {
+		listOpts.Limit = opts.PagerDuty.Incident.Limit
+	} else {
+		listOpts.Limit = PagerdutyListLimit
+	}
 
 	if len(m.teamListOpt) > 0 {
 		listOpts.TeamIDs = m.teamListOpt
@@ -111,6 +115,8 @@ func (m *MetricsCollectorResolvedIncidents) collectIncidents(callback chan<- fun
 
 		list, err := PagerDutyClient.ListIncidents(listOpts)
 		PrometheusPagerDutyApiCounter.WithLabelValues("ListIncidents").Inc()
+
+		fmt.Printf("I have received %d incidents\n", len(list.Incidents))
 
 		if err != nil {
 			m.Logger().Panic(err)
@@ -139,7 +145,6 @@ func (m *MetricsCollectorResolvedIncidents) collectIncidents(callback chan<- fun
 			}
 			timeToResolve := resolvedAt.Sub(createdAt)
 			m.Logger().Debugf("incident %s was resolved after %s", incident.ID, timeToResolve.String())
-			m.Logger().Debug("I got here 0")
 			incidentTimeToResolveList.AddDuration(prometheus.Labels{
 				"serviceID":        incident.Service.ID,
 				"urgency":          incident.Urgency,

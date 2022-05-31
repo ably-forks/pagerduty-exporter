@@ -72,6 +72,12 @@ func (m *MetricsCollectorIncident) Collect(callback chan<- func()) {
 	listOpts.Offset = 0
 	listOpts.SortBy = "created_at:desc"
 
+	if int(opts.PagerDuty.Incident.Limit) < PagerdutyListLimit {
+		listOpts.Limit = opts.PagerDuty.Incident.Limit
+	} else {
+		listOpts.Limit = PagerdutyListLimit
+	}
+
 	if len(m.teamListOpt) > 0 {
 		listOpts.TeamIDs = m.teamListOpt
 	}
