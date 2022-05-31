@@ -45,6 +45,7 @@ func (m *MetricsCollectorResolvedIncidents) Setup(collector *collector.Collector
 			},
 		},
 		[]string{
+			"incidentID"
 			"serviceID",
 			"urgency",
 			"escalationPolicy",
@@ -72,6 +73,7 @@ func (m *MetricsCollectorResolvedIncidents) Setup(collector *collector.Collector
 			},
 		},
 		[]string{
+			"incidentID"
 			"serviceID",
 			"urgency",
 			"escalationPolicy",
@@ -145,6 +147,7 @@ func (m *MetricsCollectorResolvedIncidents) collectIncidents(callback chan<- fun
 			timeToResolve := resolvedAt.Sub(createdAt)
 			m.Logger().Debugf("incident %s was resolved after %s", incident.ID, timeToResolve.String())
 			incidentTimeToResolveList.AddDuration(prometheus.Labels{
+				"incidentID":       incident.ID
 				"serviceID":        incident.Service.ID,
 				"urgency":          incident.Urgency,
 				"escalationPolicy": incident.EscalationPolicy.ID,
@@ -155,6 +158,7 @@ func (m *MetricsCollectorResolvedIncidents) collectIncidents(callback chan<- fun
 				timeToAcknowledge := acknowledgedAt.Sub(createdAt)
 				m.Logger().Debugf("incident %s was acknowledged after %s", incident.ID, timeToAcknowledge.String())
 				incidentTimeToAcknowledgeList.AddDuration(prometheus.Labels{
+					"incidentID":	    incident.ID
 					"serviceID":        incident.Service.ID,
 					"urgency":          incident.Urgency,
 					"escalationPolicy": incident.EscalationPolicy.ID,
