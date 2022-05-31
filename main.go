@@ -235,17 +235,6 @@ func initMetricCollector() {
 		log.WithField("collector", collectorName).Infof("collector disabled")
 	}
 
-	collectorName = "ResolvedIncident"
-	if opts.ScrapeTime.Live.Seconds() > 0 {
-		c := collector.New(collectorName, &MetricsCollectorResolvedIncidents{teamListOpt: opts.PagerDuty.Teams.Filter}, log.StandardLogger())
-		c.SetScapeTime(opts.ScrapeTime.Live)
-		if err := c.Start(); err != nil {
-			log.Panic(err.Error())
-		}
-	} else {
-		log.WithField("collector", collectorName).Infof("collector disabled")
-	}
-
 	collectorName = "Summary"
 	if opts.ScrapeTime.Summary.Seconds() > 0 {
 		c := collector.New(collectorName, &MetricsCollectorSummary{teamListOpt: opts.PagerDuty.Teams.Filter}, log.StandardLogger())
