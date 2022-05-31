@@ -31,19 +31,17 @@ func (m *MetricsCollectorResolvedIncidents) Setup(collector *collector.Collector
 			Name: "pagerduty_resolved_incident_resolution_time",
 			Help: "PagerDuty time to incident resolution histogram",
 			Buckets: []float64{
-				1 * 60,       // 1 min
-				2 * 60,       // 2 min
-				3 * 60,       // 3 min
-				4 * 60,       // 4 min
-				5 * 60,       // 5 min
-				10 * 60,      // 10 min
-				15 * 60,      // 15 min
-				30 * 60,      // 30 min
-				1 * 60 * 60,  // 1 hour
-				2 * 60 * 60,  // 2 hour
-				6 * 60 * 60,  // 6 hour
-				24 * 60 * 60, // 1 day
-
+				5 * 60,            // 5 min
+				10 * 60,           // 10 min
+				15 * 60,           // 15 min
+				30 * 60,           // 30 min
+				1 * 60 * 60,       // 1 hour
+				2 * 60 * 60,       // 2 hour
+				6 * 60 * 60,       // 6 hour
+				12 * 60 * 60,      // 12 hour
+				24 * 60 * 60,      // 1 day
+				7 * 24 * 60 * 60,  // 7 days (week)
+				31 * 24 * 60 * 60, // 1 month
 			},
 		},
 		[]string{
@@ -59,17 +57,18 @@ func (m *MetricsCollectorResolvedIncidents) Setup(collector *collector.Collector
 			Name: "pagerduty_resolved_incident_acknowledged_time",
 			Help: "PagerDuty time to incident acknowledgement histogram",
 			Buckets: []float64{
-				5 * 60,            // 5 min
-				10 * 60,           // 10 min
-				15 * 60,           // 15 min
-				30 * 60,           // 30 min
-				1 * 60 * 60,       // 1 hour
-				2 * 60 * 60,       // 2 hour
-				6 * 60 * 60,       // 6 hour
-				12 * 60 * 60,      // 12 hour
-				24 * 60 * 60,      // 1 day
-				7 * 24 * 60 * 60,  // 7 days (week)
-				31 * 24 * 60 * 60, // 1 month
+				1 * 60,       // 1 min
+				2 * 60,       // 2 min
+				3 * 60,       // 3 min
+				4 * 60,       // 4 min
+				5 * 60,       // 5 min
+				10 * 60,      // 10 min
+				15 * 60,      // 15 min
+				30 * 60,      // 30 min
+				1 * 60 * 60,  // 1 hour
+				2 * 60 * 60,  // 2 hour
+				6 * 60 * 60,  // 6 hour
+				24 * 60 * 60, // 1 day
 			},
 		},
 		[]string{
